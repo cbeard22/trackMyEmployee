@@ -5,27 +5,52 @@ CREATE DATABASE employee_trackerDB;
 USE employee_trackerDB;
 
 CREATE TABLE department (
-	 id INT NOT NULL AUTO_INCREMENT,
-     NAME VARCHAR(30) NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
+     NAME VARCHAR(30),
      PRIMARY KEY (id)
      );
 
 CREATE TABLE role (
 	 id INT NOT NULL AUTO_INCREMENT,
-     title VARCHAR(30) NOT NULL,
-     salary DECIMAL(10,2) NOT NULL,
-     department_id INT NOT NULL,
+     title VARCHAR(30),
+     salary DECIMAL(10,2),
+     department_id INT,
      PRIMARY KEY(id),
      FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
      );
      
 CREATE TABLE employee (
  id INT NOT NULL AUTO_INCREMENT,
- first_name VARCHAR(30) NOT NULL,
- last_name VARCHAR(30) NOT NULL,
- role_id INT NOT NULL,
+ first_name VARCHAR(30),
+ last_name VARCHAR(30),
+ role_id INT,
  manager_id INT,
  FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
  FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE,
  PRIMARY KEY(id)
  );
+
+
+
+-- SEEDS
+INSERT INTO department (name)
+VALUE ("Sales");
+INSERT INTO department (name)
+VALUE ("Management");
+
+INSERT INTO role (title, salary, department_id)
+VALUE ("Employee", 80000, 2);
+INSERT INTO role (title, salary, department_id)
+VALUE ("Manager", 250000, 1);
+
+
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Billy", "Bob", 1, NULL);
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUE ("Courtney", "Hertig", 2, 3);
+
+
+SELECT * FROM department;
+SELECT * FROM role;
+SELECT * FROM employee;
+

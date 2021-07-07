@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/cbeard22/trackMyEmployee#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^10.0.0",
     "inquirer": "^8.1.1",
     "mysql": "^2.18.1",
-    "node": "^16.4.0"
+    "node": "^16.4.0",
+    "routes": "^2.1.0"
   }
 }
