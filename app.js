@@ -17,6 +17,7 @@ connection.connect((err) => {
 });
 
 const menu = () => {
+
     inquirer
         .prompt({
             name: 'action',
@@ -90,10 +91,22 @@ const viewAllDepartments = () => {
             console.table(res)
             menu();
         })
-
 }
 
 const addEmployee = () => {
+    let roleArr = [];
+    connection.query("SELECT * FROM role", function (err, answer) {
+        answer.map(role => {
+            roleArr.push({ name: role.title, value: role.id });
+        })
+    })
+    let manageArr = ["", 2];
+    connection.query("SELECT * FROM employee WHERE employee.manager_id = 1", function (err, ans) {
+        ans.map(manager => {
+            manageArr.push({ name: manager.title, value: manager.id })
+        })
+    })
+
     inquirer
         .prompt([
             {
@@ -106,16 +119,30 @@ const addEmployee = () => {
                 type: 'input',
                 message: "What is this employee's last name?"
             },
+            {
+                name: "selectRole",
+                type: "list",
+                message: "Please select their role from the provided list.",
+                choices: roleArr
+            },
+            {
+                name: 'managerId',
+                type: 'list',
+                message: "What is ID of the employee's manager?",
+                choices: manageArr
+
+            },
 
         ]).then(function (answer) {
             connection.query('INSERT INTO employee SET ?',
                 {
                     first_name: answer.firstname,
                     last_name: answer.lastname,
-                    manager_id: null,
-                    role_id: null
+                    manager_id: answer.managerId,
+                    role_id: answer.selectRole
                 }, function (err) {
                     if (err) throw err;
+                    console.log("Employee was added!")
                     console.table(answer)
                     menu()
                 })
@@ -135,7 +162,7 @@ const updateEmployee = () => {
                     name: 'updateEmpRole',
                     type: "list",
                     message: "Select the employee's new role.",
-                    choices: allEmployee
+                    choices: (allEmployee)
                 },
 
                 {
@@ -163,35 +190,44 @@ const updateEmployee = () => {
 };
 
 const addRole = () => {
+    let deptId = [];
+    connection.query("SELECT * FROM department", function (err, answer) {
+        answer.map(department => {
+            deptId.push({ name: department.name, value: department.id });
+        })
+    });
     inquirer
         .prompt([
             {
                 name: "Title",
                 type: "input",
-                message: "What is the employee's title?"
+                message: "What is the new job role?"
             },
             {
                 name: "Salary",
                 type: "input",
-                message: "What is their Salary?"
+                message: "What is the salary?"
             },
             {
                 name: "addDepartment",
-                type: "input",
-                message: "What is the Employee's Department id?"
+                type: "list",
+                message: "What is the role's department id?",
+                choices: deptId
             }
-        ]).then(function (res) {
+
+        ]).then(function (val) {
             connection.query(
                 "INSERT INTO role SET ?",
                 {
-                    title: res.Title,
-                    salary: res.Salary,
-                    department_id: res.addDepartment
+                    title: val.Title,
+                    salary: val.Salary,
+                    department_id: val.addDepartment
                 },
                 function (err, res) {
                     if (err) throw err;
 
-                    console.table(res);
+                    console.table(val);
+                    console.log("Role was added!")
                 }
             );
             menu();
@@ -216,6 +252,7 @@ const addDepartment = () => {
                 }
             ),
                 console.table(res);
+                console.log("Department was added!")
             menu();
         });
 };

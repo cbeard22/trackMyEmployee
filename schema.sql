@@ -5,13 +5,13 @@ CREATE DATABASE employee_trackerDB;
 USE employee_trackerDB;
 
 CREATE TABLE department (
-	id INT NOT NULL AUTO_INCREMENT,
-     NAME VARCHAR(30),
+	id INT AUTO_INCREMENT NOT NULL,
+     name VARCHAR(30),
      PRIMARY KEY (id)
      );
 
 CREATE TABLE role (
-	 id INT NOT NULL AUTO_INCREMENT,
+	 id INT AUTO_INCREMENT NOT NULL ,
      title VARCHAR(30),
      salary DECIMAL(10,2),
      department_id INT,
@@ -20,7 +20,7 @@ CREATE TABLE role (
      );
      
 CREATE TABLE employee (
- id INT NOT NULL AUTO_INCREMENT,
+ id INT AUTO_INCREMENT NOT NULL,
  first_name VARCHAR(30),
  last_name VARCHAR(30),
  role_id INT,
@@ -39,15 +39,15 @@ INSERT INTO department (name)
 VALUE ("Management");
 
 INSERT INTO role (title, salary, department_id)
-VALUE ("Employee", 80000, 2);
+VALUE ("Employee", 80000, 1);
 INSERT INTO role (title, salary, department_id)
-VALUE ("Manager", 250000, 1);
+VALUE ("Manager", 250000, 2);
 
 
 INSERT INTO employee (first_name, last_name, manager_id, role_id)
 VALUE ("Billy", "Bob", 1, NULL);
 INSERT INTO employee (first_name, last_name, manager_id, role_id)
-VALUE ("Courtney", "Hertig", 2, 3);
+VALUE ("Courtney", "Hertig", 2, 1);
 
 
 SELECT * FROM department;
